@@ -16,21 +16,31 @@ Returns
 int (0 to 1023)
 */
 
-int pin = 7;          // OUT pin of ACHS-7121 Current Sensor is connected to analog pin 7 of the Arduino. 
+#include <Servo.h>
+
+int pin = 6;          // OUT pin of ACHS-7121 Current Sensor is connected to analog pin 7 of the Arduino. 
 int value = 0;
-int voltage = 1023;   // default max value that can be read is 4.9mv per unit  
+int voltage = 1023;   // default max value that can be read is 4.9mv per unit 
+byte servoPin = 7;
+Servo servo; 
 
 void setup(){
   Serial.begin(9600);
+  servo.attach(servoPin);
+  servo.writeMicroseconds(1500); // send "stop" signal to ESC.
+  delay(7000); // delay to allow the ESC to recognize the stopped signal
 }
 
 void loop(){
-  value = analogRead(pin);    // read the input pin
-  Serial.println(val);        // output the value for testing purposes
-  
-  // if statement to stop motor if current sensor reads a certain voltage
-  if (value >= voltage) {       
-     // stop motor
-     break;
+  int signal=1500; // Set signal value, which should be between 1100 and 1900
+  int value = analogRead(pin);
+  float voltage = (value*5)/1023.0;
+  //float current = (voltage - 2.5) / 0.185;
+  servo.writeMicroseconds(signal); // Send signal to ESC.
+  Serial.println(voltage);
+  delay(200); 
+  if(voltage >=1.68)
+  {
+    signal == 1500;
   }
 }
