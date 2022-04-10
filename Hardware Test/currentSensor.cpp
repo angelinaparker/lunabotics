@@ -31,16 +31,16 @@ void setup(){
   delay(7000); // delay to allow the ESC to recognize the stopped signal
 }
 
+int signal=1700; // Set signal value, which should be between 1100 and 1900
+
 void loop(){
-  int signal=1700; // Set signal value, which should be between 1100 and 1900
   int value = analogRead(pin);
   float voltage = (value*5)/1023.0;
   //float current = (voltage - 2.5) / 0.185;
   servo.writeMicroseconds(signal); // Send signal to ESC.
   Serial.println(voltage);
   delay(200); 
-  if(voltage >=1.68)
-  {
-    signal == 1500;
+  if(voltage <=1.68){
+    signal = 1500;
   }
 }
