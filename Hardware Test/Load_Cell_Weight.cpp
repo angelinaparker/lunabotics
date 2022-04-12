@@ -14,9 +14,9 @@
  The HX711 does one thing well: read load cells. The breakout board is compatible with any wheat-stone bridge
  based load cell which should allow a user to measure everything from a few grams to tens of tons.
 
- Arduino pin 2 -> HX711 CLK
- 3 -> DAT
- 5V -> VCC
+ Arduino pin 7 -> HX711 CLK
+ 4 -> DAT
+ 5V -> VCC shorted with VCC
  GND -> GND
  
  The HX711 board can be powered from 2.7V to 5V so the Arduino 5V power should be fine.
@@ -30,8 +30,8 @@
 
 #define calibration_factor -206100.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
 
-#define LOADCELL_DOUT_PIN  4
-#define LOADCELL_SCK_PIN  7
+#define LOADCELL_DAT_PIN  4
+#define LOADCELL_CLK_PIN  7
 
 HX711 scale;
 
@@ -39,7 +39,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("HX711 scale demo");
 
-  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
+  scale.begin(LOADCELL_DAT_PIN, LOADCELL_CLK_PIN);
   scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
   scale.tare();	//Assuming there is no weight on the scale at start up, reset the scale to 0
 
