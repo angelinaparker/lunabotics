@@ -13,10 +13,19 @@ cap.set(CV.CAP_PROP_FPS, 30)    # look up frame rate for full FOV for specific c
 
 prep_frame_time = time.time();
 
+cal_image_count = 0
+frame_count = 0
+
 while True:
     ret, frame = cap.read()   # Read the camera frame                                        
 
         # processing code 
+        frame_count += 1
+        
+        if frame_count == 30:
+            cv2.imwrite("cal_image_") + str(cal_image_count) + ".jpeg", frame)
+            cal_image_count += 1
+            frame_count = 0
         
         # calculate the FPS and display on frame
         new_frame_time = time.time()
