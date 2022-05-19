@@ -16,24 +16,33 @@ cap.set(2, camera_width)
 cap.set(4, camera_height)
 cap.set(5, camera_frame_rate)
 
-ret, frame = cap.read()     # grab frame
-
-gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-# Find aruco marker in the image
-corners, ids, rejected = aruco.detectMarkers(gray_frame, aruco_dict, camera_matrix, camera_distortion)
-
-if ids is not None:
-  aruco.drawDetectedMarkers(frame, corners)
+while True:
   
-  # get pose of marker, rotation and translation vectors
-  rvec_list_all, tvec_list_all, _objPoints = aruco.estimatePoseSingleMarkers(corners, marker_size, camera_matrix, camera_distortion)
-  
-  print(tvec_list_all)
-  
-cv2.imshow('frame', frame)
+  ret, frame = cap.read()     # grab frame
 
-cv2.waitKey(0)
+  gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+  # Find aruco marker in the image
+  corners, ids, rejected = aruco.detectMarkers(gray_frame, aruco_dict, camera_matrix, camera_distortion)
+
+  if ids is not None:
+    aruco.drawDetectedMarkers(frame, corners)
+
+    # get pose of marker, rotation and translation vectors
+    rvec_list_all, tvec_list_all, _objPoints = aruco.estimatePoseSingleMarkers(corners, marker_size, camera_matrix, camera_distortion)
+
+    rvec = rvec_list_all[0][0]
+    tvec = tvec_list_all[0][0]
+
+    aruco.drawAxis(frame, camera_matrix, camera_distortion, rvect, tvec, 100)
+
+    tvec_str = "x=%4.0f   y=%4.0f   z=%4.0f"%(tvec[0], tvec[1], tvec[2])
+    cv2.putText(frame, tvec_str, (20, 460), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2, cv2.LINE_AA)
+
+  cv2.imshow('frame', frame)
+
+  key = cv2.waitKey(1) & 0xFF
+  if key == ord('q'): break
 
 cap.release()
 cv2.destroyAllWindows()
