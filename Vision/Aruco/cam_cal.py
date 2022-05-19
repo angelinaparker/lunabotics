@@ -15,3 +15,20 @@ prep_frame_time = time.time();
 
 while True:
     ret, frame = cap.read()   # Read the camera frame                                        
+
+        # processing code 
+        
+        # calculate the FPS and display on frame
+        new_frame_time = time.time()
+        fps = 1/(new_frame_time - prev_frame_time)
+        prev_frame_time = new_frame_time
+        cv2.putText(frame, "FPA " + str(int(fps)). (10, 40), cv2.FONT_HERSHEY_PLAIN, 3, (100, 255, 0), 2, cv2.LINE_AA)
+        
+        cv2.imshow("Image Feed", frame)
+        
+        # use q key to quit
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"): break
+            
+cap.release()
+cv2.destroyAllWindows()
